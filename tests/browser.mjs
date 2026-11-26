@@ -8,10 +8,11 @@ try {
   await once(server.stdout,'data');
   browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const page=await browser.newPage({viewport:{width:1024,height:768}});
-  const errors=[]; page.on('pageerror',error=>errors.push(error.message));
+  const errors=[]; page.on('pageerror',error=>{errors.push(error.message);console.error(error.message)});
   await page.goto('http://127.0.0.1:5173');
   const canvas=page.locator('canvas');
   await canvas.waitFor();
+  for(const button of await page.locator('fieldset button').all()){await button.click();assert.equal(await button.getAttribute('aria-pressed'),'true')}
   await page.getByRole('button',{name:'Leer noticias',exact:true}).click();
   await page.waitForTimeout(600);
   const reading=await canvas.screenshot();

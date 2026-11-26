@@ -77,7 +77,7 @@ export function Actor({motion,active,onFail}:{motion:Motion,active:boolean,onFai
 }
 export default function Scene(props:{motion:Motion,active:boolean,onFail:()=>void}) {
   return <Canvas camera={{position:[0,.30,6.3],fov:39}} dpr={[1,1.5]} frameloop={props.active&&!props.motion.reduced?'always':'demand'}
-    gl={{alpha:true,antialias:true,powerPreference:'low-power'}} fallback={<Fail fn={props.onFail}/>}>
+    gl={{alpha:true,antialias:true,powerPreference:'low-power'}}>
     <Lights/>
     <Actor {...props}/></Canvas>;
 }
@@ -85,4 +85,3 @@ export function Lights(){return <><hemisphereLight args={['#fff7ed','#8589ab',1.
     <directionalLight position={[2,3,-2]} intensity={5} color="#ffe2c4"/><pointLight position={[1,2,3]} intensity={13}/>
     </>;
 }
-function Fail({fn}:{fn:()=>void}) { useEffect(fn,[fn]); return null; }
