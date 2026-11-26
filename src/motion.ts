@@ -40,9 +40,9 @@ export class Motion {
       p.y=abs(Math.cos(phase))*(fast?.16:.07); p.turn=.58; p.lean=fast?.23:.08; p.x=.38*s(t*1.2);
     } else if (a==='jump') {
       const air=Math.max(0,Math.min(1,(t-.2)/.78));
-      p.y=3.5*air*(1-air); p.stretch+=t<.2?-.19*s(t/.2*Math.PI):t<.98?.12*s(Math.PI*air):-.18*s(Math.PI*Math.min(1,(t-.98)/.37));
+      p.y=2.65*air*(1-air); p.stretch+=t<.2?-.19*s(t/.2*Math.PI):t<.98?.12*s(Math.PI*air):-.18*s(Math.PI*Math.min(1,(t-.98)/.37));
       p.leftArm-=p.y; p.rightArm+=p.y; p.leftLeg=.52*p.y; p.rightLeg=-.34*p.y;
-    } else if (a==='wave') { p.rightArm=2.4+.26*s(t*13); p.tilt=.08; }
+    } else if (a==='wave') { p.rightArm=1.85+.29*s(t*13); p.tilt=.08; }
     else if (a==='read') { p.paper=1; p.down=-.48; p.scan=.44*s(t*3); p.leftArm=.70; p.rightArm=-.70; p.lean=.15; }
     else if (a==='think') { p.leftArm=-2.65; p.scan=.55; p.down=.48; p.tilt=-.13; }
     else if (a==='curious') { p.tilt=.23; p.turn=-.22; p.stretch+=.09; p.scan=-.35; }

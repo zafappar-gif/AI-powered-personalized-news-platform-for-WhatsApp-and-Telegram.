@@ -52,6 +52,7 @@ export function Actor({motion,active,onFail}:{motion:Motion,active:boolean,onFai
     body.current.morphTargetInfluences![0]=p.shape;
     for(let i=0;i<2;i++) {
       const arm=arms.current[i]!, leg=legs.current[i]!, eye=eyes.current[i]!, pupil=pupils.current[i]!;
+      arm.position.z=.04+p.paper*.32;
       arm.rotation.z=i?p.rightArm:p.leftArm;
       const elbow=arm.getObjectByName('elbow');
       if(elbow) {elbow.rotation.z=(i?1:-1)*(.15+.3*Math.abs(arm.rotation.z)); elbow.rotation.x=-.4*p.paper;} arm.rotation.x=-p.paper*1.18;
@@ -71,7 +72,7 @@ export function Actor({motion,active,onFail}:{motion:Motion,active:boolean,onFai
           <Ball scale={[.175,.222,.085]} color="#fff8e7"/><mesh ref={v=>{pupils.current[i]=v}} scale={[.074,.103,.031]}><sphereGeometry args={[1,20,16]}/><meshBasicMaterial color="#18181b"/></mesh>
         </group>
       </group>)}
-      <group ref={paper} position={[0,.52,.58]} rotation={[-.23,0,0]}><Paper/></group>
+      <group ref={paper} position={[0,.53,.89]} rotation={[-.23,0,0]}><Paper/></group>
     </group></group></group>;
 }
 export default function Scene(props:{motion:Motion,active:boolean,onFail:()=>void}) {
