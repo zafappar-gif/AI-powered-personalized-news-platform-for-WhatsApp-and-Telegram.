@@ -1,0 +1,28 @@
+{
+  "name": "manchita-estudio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node build.mjs --serve",
+    "build": "tsc --noEmit && node build.mjs",
+    "test": "node --experimental-transform-types tests/motion.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "dependencies": {
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "three": "0.187.0",
+    "@react-three/fiber": "9.8.2",
+    "@react-three/drei": "10.7.9",
+    "gsap": "3.15.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "esbuild": "0.28.2",
+    "typescript": "5.9.3",
+    "playwright": "1.62.1"
+  }
+}
