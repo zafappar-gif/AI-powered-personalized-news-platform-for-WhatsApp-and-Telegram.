@@ -1,0 +1,33 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
+const server=spawn(process.execPath,['build.mjs','--serve'],{stdio:['ignore','pipe','inherit']});
+let browser;
+try {
+  await once(server.stdout,'data');
+  browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+  const page=await browser.newPage({viewport:{width:1024,height:768}});
+  const errors=[]; page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('http://127.0.0.1:5173');
+  const canvas=page.locator('canvas');
+  await canvas.waitFor();
+  await page.getByRole('button',{name:'Leer noticias',exact:true}).click();
+  await page.waitForTimeout(600);
+  const reading=await canvas.screenshot();
+  await page.getByRole('button',{name:'Saludar',exact:true}).click();
+  await page.waitForTimeout(400);
+  assert.notDeepEqual(reading,await canvas.screenshot());
+  const mobile=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'});
+  await mobile.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...opts){return type==='webgl2'?null:original.call(this,type,...opts)}});
+  await mobile.goto('http://127.0.0.1:5173');
+  await mobile.locator('svg.vector').waitFor();
+  await mobile.getByRole('button',{name:'Interactuar con Manchita'}).tap();
+  assert.equal(await mobile.getByRole('button',{name:'Curiosear'}).getAttribute('aria-pressed'),'true');
+  await mobile.getByRole('button',{name:'Leer noticias'}).press('Enter');
+  assert.equal(await mobile.locator('[data-part=paper]').getAttribute('opacity'),'1');
+  assert.equal(await mobile.getByRole('checkbox').isChecked(),true);
+  assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  assert.deepEqual(errors,[]);
+  console.log('OK · WebGL, cambio de pose, SVG, teclado, toque y movimiento reducido');
+} finally { await browser?.close(); server.kill(); }
